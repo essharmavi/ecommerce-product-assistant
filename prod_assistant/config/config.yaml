@@ -23,5 +23,5 @@ llm:
 
   openai:
     provider: "openai"
-    model_name: "gpt-4"
+    model_name: "gpt-4o"
     temperature: 0
