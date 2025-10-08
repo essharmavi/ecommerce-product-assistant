@@ -42,7 +42,7 @@ google-api-core==2.25.1
 google-auth==2.40.3
 googleapis-common-protos==1.70.0
 groq==0.31.1
-grpcio==1.75.0
+grpcio==1.75.1
 grpcio-status==1.75.0
 h11==0.16.0
 h2==4.3.0
@@ -162,7 +162,7 @@ traitlets==5.14.3
 trio==0.30.0
 trio-websocket==0.12.2
 typer==0.19.2
-typing-extensions==4.14.1
+typing-extensions==4.15.0
 typing-inspect==0.9.0
 typing-inspection==0.4.1
 tzdata==2025.2

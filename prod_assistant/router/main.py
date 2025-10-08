@@ -33,7 +33,11 @@ async def index(request: Request):
 @app.post("/get", response_class=HTMLResponse)
 async def chat(msg: str = Form(...)):
     """Call the Agentic RAG workflow."""
-    rag_agent = AgenticRAG()
-    answer = rag_agent.run(msg)   # run() already returns final answer string
+    # Async init AgenticRAG (loads MCP tools)
+    rag_agent = await AgenticRAG().async_init()
+    
+    # Async run the workflow
+    answer = await rag_agent.run(msg)
+    
     print(f"Agentic Response: {answer}")
     return answer

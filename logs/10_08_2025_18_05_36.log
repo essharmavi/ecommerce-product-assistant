@@ -1,0 +1,19 @@
+{"timestamp": "2025-10-08T12:35:37.983517Z", "level": "info", "event": "Running in LOCAL mode: .env loaded"}
+{"timestamp": "2025-10-08T12:35:37.983742Z", "level": "info", "event": "Loaded GROQ_API_KEY from individual env var"}
+{"timestamp": "2025-10-08T12:35:37.983787Z", "level": "info", "event": "Loaded GOOGLE_API_KEY from individual env var"}
+{"timestamp": "2025-10-08T12:35:37.983819Z", "level": "info", "event": "Loaded OPENAI_API_KEY from individual env var"}
+{"keys": {"GROQ_API_KEY": "gsk_PK...", "GOOGLE_API_KEY": "AIzaSy...", "OPENAI_API_KEY": "sk-pro..."}, "timestamp": "2025-10-08T12:35:37.983856Z", "level": "info", "event": "API keys loaded"}
+{"config_keys": ["astra_db", "embedding_model", "retriever", "llm"], "timestamp": "2025-10-08T12:35:37.985168Z", "level": "info", "event": "YAML config loaded"}
+{"timestamp": "2025-10-08T12:35:58.773958Z", "level": "info", "event": "Running in LOCAL mode: .env loaded"}
+{"timestamp": "2025-10-08T12:35:58.774412Z", "level": "info", "event": "Loaded GROQ_API_KEY from individual env var"}
+{"timestamp": "2025-10-08T12:35:58.774477Z", "level": "info", "event": "Loaded GOOGLE_API_KEY from individual env var"}
+{"timestamp": "2025-10-08T12:35:58.774514Z", "level": "info", "event": "Loaded OPENAI_API_KEY from individual env var"}
+{"keys": {"GROQ_API_KEY": "gsk_PK...", "GOOGLE_API_KEY": "AIzaSy...", "OPENAI_API_KEY": "sk-pro..."}, "timestamp": "2025-10-08T12:35:58.774559Z", "level": "info", "event": "API keys loaded"}
+{"config_keys": ["astra_db", "embedding_model", "retriever", "llm"], "timestamp": "2025-10-08T12:35:58.775508Z", "level": "info", "event": "YAML config loaded"}
+{"timestamp": "2025-10-08T12:35:58.776354Z", "level": "info", "event": "Running in LOCAL mode: .env loaded"}
+{"timestamp": "2025-10-08T12:35:58.776396Z", "level": "info", "event": "Loaded GROQ_API_KEY from individual env var"}
+{"timestamp": "2025-10-08T12:35:58.776426Z", "level": "info", "event": "Loaded GOOGLE_API_KEY from individual env var"}
+{"timestamp": "2025-10-08T12:35:58.776454Z", "level": "info", "event": "Loaded OPENAI_API_KEY from individual env var"}
+{"keys": {"GROQ_API_KEY": "gsk_PK...", "GOOGLE_API_KEY": "AIzaSy...", "OPENAI_API_KEY": "sk-pro..."}, "timestamp": "2025-10-08T12:35:58.776482Z", "level": "info", "event": "API keys loaded"}
+{"config_keys": ["astra_db", "embedding_model", "retriever", "llm"], "timestamp": "2025-10-08T12:35:58.777371Z", "level": "info", "event": "YAML config loaded"}
+{"provider": "openai", "model": "gpt-4o", "timestamp": "2025-10-08T12:35:58.777435Z", "level": "info", "event": "Loading LLM"}
