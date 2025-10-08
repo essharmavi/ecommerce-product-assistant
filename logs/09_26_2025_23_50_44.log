@@ -1,0 +1,22 @@
+patching driver executable /Users/vishalsharma/Library/Application Support/undetected_chromedriver/undetected_chromedriver
+patching driver executable /Users/vishalsharma/Library/Application Support/undetected_chromedriver/undetected_chromedriver
+{"timestamp": "2025-09-26T18:22:07.933292Z", "level": "info", "event": "Running in LOCAL mode: .env loaded"}
+{"timestamp": "2025-09-26T18:22:07.933898Z", "level": "info", "event": "Loaded GROQ_API_KEY from individual env var"}
+{"timestamp": "2025-09-26T18:22:07.934001Z", "level": "info", "event": "Loaded GOOGLE_API_KEY from individual env var"}
+{"keys": {"GROQ_API_KEY": "gsk_PK...", "GOOGLE_API_KEY": "AIzaSy..."}, "timestamp": "2025-09-26T18:22:07.934095Z", "level": "info", "event": "API keys loaded"}
+{"config_keys": ["astra_db", "embedding_model", "retriever", "llm"], "timestamp": "2025-09-26T18:22:07.936417Z", "level": "info", "event": "YAML config loaded"}
+{"model": "models/text-embedding-004", "timestamp": "2025-09-26T18:22:07.973227Z", "level": "info", "event": "Loading embedding model"}
+vector store default init, collection 'ecommercedata'
+No valid keyspace found in environment variable.
+Detecting API environment 'prod' from supplied endpoint
+createCollection('ecommercedata')
+HTTP Request: POST https://f2231e3b-54ef-4b5e-a23e-01991a9af6fa-us-east-2.apps.astra.datastax.com/api/json/v1/default_keyspace "HTTP/1.1 200 OK"
+finished createCollection('ecommercedata')
+inserting 1 documents in 'ecommercedata'
+insertMany(chunk) on 'ecommercedata'
+HTTP Request: POST https://f2231e3b-54ef-4b5e-a23e-01991a9af6fa-us-east-2.apps.astra.datastax.com/api/json/v1/default_keyspace/ecommercedata "HTTP/1.1 200 OK"
+finished insertMany(chunk) on 'ecommercedata'
+finished inserting 1 documents in 'ecommercedata'
+cursor fetching a page: (empty page state) from ecommercedata
+HTTP Request: POST https://f2231e3b-54ef-4b5e-a23e-01991a9af6fa-us-east-2.apps.astra.datastax.com/api/json/v1/default_keyspace/ecommercedata "HTTP/1.1 200 OK"
+cursor finished fetching a page: (empty page state) from ecommercedata
