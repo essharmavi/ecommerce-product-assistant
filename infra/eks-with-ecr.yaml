@@ -4,7 +4,7 @@ Description: Standalone EKS Cluster with NodeGroup and ECR Repository
 Parameters:
   ClusterName:
     Type: String
-    Default: product-assistant-cluster
+    Default: product-assistant-cluster-latest
   NodeInstanceType:
     Type: String
     Default: t3.medium
@@ -29,6 +29,7 @@ Resources:
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
+    DeletionPolicy: Retain
     Properties:
       Tags:
         - Key: Name
@@ -159,7 +160,7 @@ Resources:
     ### --- EKS NodeGroup ---
   NodeGroup:
     Type: AWS::EKS::Nodegroup
-    DependsOn: EKSCluster   # ✅ ensures cluster is ready
+    DependsOn: EKSCluster   # ensures cluster is ready
     Properties:
       ClusterName: !Ref ClusterName
       NodeRole: !GetAtt NodeGroupRole.Arn
