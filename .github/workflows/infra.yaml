@@ -27,3 +27,12 @@ jobs:
             --template-file infra/eks-with-ecr.yaml \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --region ${{ secrets.AWS_REGION }}
+      
+      - name: Describe CloudFormation Stack Events
+        if: failure()   # Only runs if previous step fails
+        run: |
+          aws cloudformation describe-stack-events \
+            --stack-name product-assistant-cluster \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'StackEvents[*].[ResourceType,LogicalResourceId,ResourceStatus,ResourceStatusReason]' \
+            --output table
