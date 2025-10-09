@@ -3,8 +3,8 @@ name: CI/CD to EKS
 on:
   push:
     branches:
-      - main   # runs on push to main branch
-  workflow_dispatch: # allow manual trigger
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -22,7 +22,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      # Deploy CloudFormation Stack
       - name: Deploy CloudFormation Stack
+        id: cfn_deploy
         run: |
           aws cloudformation deploy \
             --stack-name product-assistant-cluster \
@@ -30,6 +32,15 @@ jobs:
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --region ${{ secrets.AWS_REGION }}
 
+      # ✅ Debug step: show stack events if deploy fails
+      - name: Describe CloudFormation Stack Events
+        if: failure()   # Only runs if previous step fails
+        run: |
+          aws cloudformation describe-stack-events \
+            --stack-name product-assistant-cluster \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'StackEvents[*].[ResourceType,LogicalResourceId,ResourceStatus,ResourceStatusReason]' \
+            --output table
 
       # Login to ECR
       - name: Login to Amazon ECR
@@ -57,7 +68,7 @@ jobs:
         run: |
           aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
-      # ✅ NEW STEP: Create/Update Kubernetes Secret
+      # Create Kubernetes secret for API keys
       - name: Create Kubernetes secret for API keys
         run: |
           kubectl create secret generic product-assistant-secrets \
@@ -73,8 +84,6 @@ jobs:
         run: |
           kubectl apply -f k8/deployment.yaml
           kubectl apply -f k8/service.yaml
-      
-      
 
       # Verify rollout
       - name: Verify Deployment
