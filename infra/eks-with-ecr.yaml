@@ -144,6 +144,8 @@ Resources:
     Properties:
       Name: !Ref ClusterName
       RoleArn: !GetAtt EKSClusterRole.Arn
+      AccessConfig:
+        AuthenticationMode: API_AND_CONFIG_MAP 
       ResourcesVpcConfig:
         SubnetIds:
           - !Ref PublicSubnet1
