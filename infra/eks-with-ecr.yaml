@@ -189,7 +189,9 @@ Resources:
   ### --- Access Entry for Cluster Admin ---
   ClusterAdminAccess:
     Type: AWS::EKS::AccessEntry
-    DependsOn: EKSCluster  # ✅ ensures cluster exists first
+    DependsOn:
+      - EKSCluster
+      - NodeGroup 
     Properties:
       ClusterName: !Ref ClusterName
       PrincipalArn: !Sub "arn:aws:iam::${AWSAccountId}:user/vishal"
