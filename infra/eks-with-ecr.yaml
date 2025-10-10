@@ -22,7 +22,6 @@ Parameters:
     Type: String
     Description: "AWS Account ID for IAM principal"
 
-
 Resources:
   ### --- VPC ---
   VPC:
@@ -138,6 +137,10 @@ Resources:
   ### --- EKS Cluster ---
   EKSCluster:
     Type: AWS::EKS::Cluster
+    DependsOn:
+      - EKSClusterRole
+      - PublicSubnet1
+      - PublicSubnet2
     Properties:
       Name: !Ref ClusterName
       RoleArn: !GetAtt EKSClusterRole.Arn
@@ -186,6 +189,7 @@ Resources:
   ### --- Access Entry for Cluster Admin ---
   ClusterAdminAccess:
     Type: AWS::EKS::AccessEntry
+    DependsOn: EKSCluster  # ✅ ensures cluster exists first
     Properties:
       ClusterName: !Ref ClusterName
       PrincipalArn: !Sub "arn:aws:iam::${AWSAccountId}:user/vishal"
@@ -194,7 +198,6 @@ Resources:
         - PolicyArn: arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
           AccessScope:
             Type: cluster
-
 
 Outputs:
   ECRRepositoryUri:
@@ -206,3 +209,11 @@ Outputs:
   EKSClusterName:
     Description: Name of the EKS Cluster
     Value: !Ref ClusterName
+
+  ClusterEndpoint:
+    Description: EKS API endpoint for kubectl config
+    Value: !GetAtt EKSCluster.Endpoint
+
+  ClusterCAData:
+    Description: Certificate authority data for authentication
+    Value: !GetAtt EKSCluster.CertificateAuthorityData
