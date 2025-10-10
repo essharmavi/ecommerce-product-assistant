@@ -97,6 +97,46 @@ jobs:
             --name product-assistant-cluster-latest \
             --region ${{ secrets.AWS_REGION }}
       
+      # Create or Update aws-auth ConfigMap
+      - name: Create aws-auth ConfigMap
+        run: |
+          PRINCIPAL_ARN="${{ steps.get-caller.outputs.caller-arn }}"
+          NODE_ROLE_ARN=$(aws cloudformation describe-stacks \
+            --stack-name product-assistant-cluster \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'Stacks[0].Outputs[?OutputKey==`NodeGroupRoleArn`].OutputValue' \
+            --output text)
+          
+          USERNAME=$(echo $PRINCIPAL_ARN | rev | cut -d'/' -f1 | rev)
+          
+          echo "Creating aws-auth ConfigMap..."
+          
+          cat <<EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: aws-auth
+            namespace: kube-system
+          data:
+            mapRoles: |
+              - rolearn: ${NODE_ROLE_ARN}
+                username: system:node:{{EC2PrivateDNSName}}
+                groups:
+                  - system:bootstrappers
+                  - system:nodes
+            mapUsers: |
+              - userarn: arn:aws:iam::859037107780:user/prod-assistant
+                username: prod-assistant
+                groups:
+                  - system:masters
+              - userarn: ${PRINCIPAL_ARN}
+                username: ${USERNAME}
+                groups:
+                  - system:masters
+          EOF
+          
+          echo "✅ aws-auth ConfigMap created successfully"
+      
       # Verify cluster access
       - name: Verify Cluster Access
         run: |
