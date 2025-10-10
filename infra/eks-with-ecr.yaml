@@ -5,15 +5,23 @@ Parameters:
   ClusterName:
     Type: String
     Default: product-assistant-cluster-latest
+
   NodeInstanceType:
     Type: String
-    Default: t2.micro
+    Default: t3.small   # changed from t2.micro to avoid instance launch failure
+
   DesiredCapacity:
     Type: Number
     Default: 2
+
   ECRRepositoryName:
     Type: String
     Default: product-assistant
+    
+  AWSAccountId:
+    Type: String
+    Description: "AWS Account ID for IAM principal"
+
 
 Resources:
   ### --- VPC ---
@@ -105,7 +113,6 @@ Resources:
           CidrIp: 0.0.0.0/0
 
   ### --- ECR Repository ---
-
   ProductAssistantECR:
     Type: AWS::ECR::Repository
     Properties:
@@ -150,17 +157,19 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              Service: ec2.amazonaws.com
+              Service:
+                - ec2.amazonaws.com
+                - eks.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
 
-    ### --- EKS NodeGroup ---
+  ### --- EKS NodeGroup ---
   NodeGroup:
     Type: AWS::EKS::Nodegroup
-    DependsOn: EKSCluster   # ensures cluster is ready
+    DependsOn: EKSCluster
     Properties:
       ClusterName: !Ref ClusterName
       NodeRole: !GetAtt NodeGroupRole.Arn
@@ -174,6 +183,17 @@ Resources:
       InstanceTypes:
         - !Ref NodeInstanceType
 
+  ### --- Access Entry for Cluster Admin ---
+ClusterAdminAccess:
+  Type: AWS::EKS::AccessEntry
+  Properties:
+    ClusterName: !Ref ClusterName
+    PrincipalArn: !Sub "arn:aws:iam::${AWSAccountId}:user/vishal"
+    Type: STANDARD
+    AccessPolicies:
+      - PolicyArn: arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
+        AccessScope:
+          Type: cluster
 
 Outputs:
   ECRRepositoryUri:
