@@ -17,7 +17,7 @@ Parameters:
   ECRRepositoryName:
     Type: String
     Default: product-assistant
-    
+
   AWSAccountId:
     Type: String
     Description: "AWS Account ID for IAM principal"
@@ -184,16 +184,17 @@ Resources:
         - !Ref NodeInstanceType
 
   ### --- Access Entry for Cluster Admin ---
-ClusterAdminAccess:
-  Type: AWS::EKS::AccessEntry
-  Properties:
-    ClusterName: !Ref ClusterName
-    PrincipalArn: !Sub "arn:aws:iam::${AWSAccountId}:user/vishal"
-    Type: STANDARD
-    AccessPolicies:
-      - PolicyArn: arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
-        AccessScope:
-          Type: cluster
+  ClusterAdminAccess:
+    Type: AWS::EKS::AccessEntry
+    Properties:
+      ClusterName: !Ref ClusterName
+      PrincipalArn: !Sub "arn:aws:iam::${AWSAccountId}:user/vishal"
+      Type: STANDARD
+      AccessPolicies:
+        - PolicyArn: arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
+          AccessScope:
+            Type: cluster
+
 
 Outputs:
   ECRRepositoryUri:
