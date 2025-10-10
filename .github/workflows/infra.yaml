@@ -26,7 +26,9 @@ jobs:
             --stack-name product-assistant-cluster \
             --template-file infra/eks-with-ecr.yaml \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
-            --region ${{ secrets.AWS_REGION }}
+            --region ${{ secrets.AWS_REGION }} \
+            --parameter-overrides AWSAccountId=${{ secrets.AWS_ID }}
+
       
       - name: Describe CloudFormation Stack Events
         if: failure()   # Only runs if previous step fails
