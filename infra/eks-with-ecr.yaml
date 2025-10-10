@@ -14,6 +14,10 @@ Parameters:
   ECRRepositoryName:
     Type: String
     Default: product-assistant
+  AccessEntryPrincipalArn:
+    Type: String
+    Description: ARN of the IAM user or role to grant access to the cluster
+    Default: ""
 
 Resources:
   ### --- VPC ---
@@ -139,6 +143,8 @@ Resources:
           - !Ref PublicSubnet2
         SecurityGroupIds:
           - !Ref EKSSecurityGroup
+      AccessConfig:
+        AuthenticationMode: API_AND_CONFIG_MAP
 
   ### --- IAM Role for NodeGroup ---
   NodeGroupRole:
@@ -156,7 +162,7 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
 
-    ### --- EKS NodeGroup ---
+  ### --- EKS NodeGroup ---
   NodeGroup:
     Type: AWS::EKS::Nodegroup
     DependsOn: EKSCluster   # ensures cluster is ready
@@ -173,6 +179,30 @@ Resources:
       InstanceTypes:
         - !Ref NodeInstanceType
 
+  ### --- EKS Access Entry ---
+  EKSAccessEntry:
+    Type: AWS::EKS::AccessEntry
+    Condition: HasAccessEntryPrincipal
+    DependsOn: EKSCluster
+    Properties:
+      ClusterName: !Ref ClusterName
+      PrincipalArn: !Ref AccessEntryPrincipalArn
+      Type: STANDARD
+
+  ### --- EKS Access Policy Association ---
+  EKSAccessPolicyAssociation:
+    Type: AWS::EKS::AccessPolicyAssociation
+    Condition: HasAccessEntryPrincipal
+    DependsOn: EKSAccessEntry
+    Properties:
+      ClusterName: !Ref ClusterName
+      PrincipalArn: !Ref AccessEntryPrincipalArn
+      PolicyArn: arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
+      AccessScope:
+        Type: cluster
+
+Conditions:
+  HasAccessEntryPrincipal: !Not [!Equals [!Ref AccessEntryPrincipalArn, ""]]
 
 Outputs:
   ECRRepositoryUri:
