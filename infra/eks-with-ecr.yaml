@@ -196,7 +196,7 @@ Resources:
       - NodeGroup 
     Properties:
       ClusterName: !Ref ClusterName
-      PrincipalArn: !Sub "arn:aws:iam::${AWSAccountId}:user/vishal"
+      PrincipalArn: !Sub "arn:aws:iam::${AWSAccountId}:user/prod-assistant"
       Type: STANDARD
       AccessPolicies:
         - PolicyArn: arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy
