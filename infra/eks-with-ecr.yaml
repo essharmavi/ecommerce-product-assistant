@@ -14,6 +14,10 @@ Parameters:
   ECRRepositoryName:
     Type: String
     Default: product-assistant
+  IAMUserArn:
+    Type: String
+    Description: ARN of the IAM user to grant cluster access (e.g., arn:aws:iam::123456789012:user/username)
+    Default: ""
 
 Resources:
   ### --- VPC ---
