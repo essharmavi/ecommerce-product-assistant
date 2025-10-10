@@ -1,16 +1,13 @@
 name: Provision Infra (EKS + ECR)
-
 on:
   workflow_dispatch:   # manual trigger only
-
 jobs:
   provision:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+      
       # Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -18,7 +15,15 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
+      
+      # Get current IAM identity
+      - name: Get Current IAM Principal ARN
+        id: get-caller
+        run: |
+          CALLER_ARN=$(aws sts get-caller-identity --query Arn --output text)
+          echo "caller-arn=$CALLER_ARN" >> $GITHUB_OUTPUT
+          echo "Current IAM Principal: $CALLER_ARN"
+      
       # Deploy CloudFormation Stack
       - name: Deploy CloudFormation Stack
         run: |
@@ -27,8 +32,10 @@ jobs:
             --template-file infra/eks-with-ecr.yaml \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --region ${{ secrets.AWS_REGION }} \
-            --parameter-overrides AWSAccountId=${{ secrets.AWS_ID }}
-
+            --parameter-overrides \
+              AWSAccountId=${{ secrets.AWS_ID }} \
+              AccessEntryPrincipalArn=${{ steps.get-caller.outputs.caller-arn }}
+      
       
       - name: Describe CloudFormation Stack Events
         if: failure()   # Only runs if previous step fails
